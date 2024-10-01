@@ -1,0 +1,19 @@
+/* Styles for custom button */
+.custom-button {
+	/* padding: 10px; */
+	border: 1px solid var(--secondaryColor); /* Border color */
+	color: var(--secondaryColor); /* Text color */
+	background-color: transparent; /* Transparent background */
+	font-size: 1rem;
+	cursor: pointer;
+	transition: 0.3s;
+	font-weight: 600;
+	border-radius: 5px;
+	margin-left: 10px;
+  }
+  
+  .custom-button:hover {
+	background-color: var(--secondaryColor);
+	color: var(--textColor);
+  }
+  
