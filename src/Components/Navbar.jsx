@@ -28,7 +28,7 @@ function Navbar() {
     queryFn: fetchProducts, // This replaces the previous fetch function directly
   });
 
-  console.log(JSON.stringify(data,null,2));
+  // console.log(JSON.stringify(data,null,2));
   
 
   return (
