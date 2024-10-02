@@ -1,64 +1,171 @@
-import { useRef } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from "react-router-dom";
-import "../Styles/main.css";
-import logo from "../assets/logo.png";
-import cartIcon from "../assets/cart.png";
-import profileIcon from "../assets/profile.png";
-import logoutIcon from "../assets/logout.png";
-import CustomButton from './CustomButton';
-import { fetchProducts } from '../services/productService'; // Import the fetchProducts function
-import { useQuery } from "@tanstack/react-query";
+import logo from "../assets/logo.png";  // Import your logo
+import cartIcon from "../assets/cart.png";  // Import cart icon
+import profileIcon from "../assets/profile.png";  // Import profile icon
+import logoutIcon from "../assets/logout.png";  // Import logout icon
+import { useState } from 'react';
 
+const pages = ['Men Collection', 'Women Collection', 'About Us', 'Contact Us'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
-  const navRef = useRef();
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
 
-  const showNavbar = () => {
-    navRef.current.classList.toggle("responsive_nav");
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   const handleEarnWithUsClick = () => {
-    navigate('/earn'); 
+    navigate('/earn');
   };
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['products'], // This replaces the previous array form
-    queryFn: fetchProducts, // This replaces the previous fetch function directly
-  });
-
-  // console.log(JSON.stringify(data,null,2));
-  
-
   return (
-    <header>
-      <img src={logo} alt="Logo" />
-      <nav ref={navRef}>
-        <Link to="/">Home</Link>
-        <a href="/#">Men Collection</a>
-        <a href="/#">Women Collection</a>
-        <Link to="/about">About Us</Link>
-        <Link to="/contact">Contact Us</Link>
-        <CustomButton 
-          height="40px" 
-          width="150px" 
-          text="Earn With Us" 
-          onClick={handleEarnWithUsClick} 
-        />
-        <div className="navbar-icons" style={{ marginLeft: "5rem", gap: 20 }}>
-          <img src={cartIcon} alt="Cart" className="icon cart-icon" />
-          <img src={profileIcon} alt="Profile" className="icon profile-icon" />
-          <img src={logoutIcon} alt="Logout" className="icon logout-icon" />
-        </div>
-        <button className="nav-btn nav-close-btn" onClick={showNavbar}>
-          <FaTimes />
-        </button>
-      </nav>
-      <button className="nav-btn" onClick={showNavbar}>
-        <FaBars />
-      </button>
-    </header>
+    <AppBar position="static" sx={{ backgroundColor: '#29335c' }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          {/* Logo for larger screens */}
+          <Box
+            component="img"
+            src={logo}
+            alt="Logo"
+            sx={{ display: { xs: 'none', md: 'flex' }, mr: 2, maxWidth: '150px' }}
+          />
+          
+          {/* Menu icon for small screens */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="menu"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Link to={`/${page.toLowerCase().replace(' ', '')}`} style={{ textDecoration: 'none', color: '#000' }}>
+                    {page}
+                  </Link>
+                </MenuItem>
+              ))}
+              <MenuItem>
+                <Button
+                  onClick={handleEarnWithUsClick}
+                  sx={{ color: '#db2b39', fontWeight: 'bold' }}
+                >
+                  Earn With Us
+                </Button>
+              </MenuItem>
+            </Menu>
+          </Box>
+
+          {/* Logo for small screens */}
+          <Box
+            component="img"
+            src={logo}
+            alt="Logo"
+            sx={{ display: { xs: 'flex', md: 'none' }, mr: 2, maxWidth: '100px' }}
+          />
+
+          {/* Nav links for large screens */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block', textDecoration: 'none' }}
+              >
+                <Link to={`/${page.toLowerCase().replace(' ', '')}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  {page}
+                </Link>
+              </Button>
+            ))}
+            <Button
+              onClick={handleEarnWithUsClick}
+              sx={{ my: 2, color: '#f79d65', fontWeight: 'bold', display: 'block' }}
+            >
+              Earn With Us
+            </Button>
+          </Box>
+
+          {/* User icons and avatar */}
+          <Box sx={{ flexGrow: 0, display: 'flex', gap: 2 }}>
+            <Box component="img" src={cartIcon} alt="Cart" sx={{ width: 30 }} />
+            <Box component="img" src={profileIcon} alt="Profile" sx={{ width: 30 }} />
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src={logoutIcon} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }
 

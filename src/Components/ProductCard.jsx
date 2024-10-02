@@ -39,14 +39,14 @@ export default function ProductCard({ name, description, image, buyPrice, rentPr
         <CustomButton
           text={`Buy at: ${buyPrice}`}
           height="40px"
-          width="120px"
+          width="150px"
           onClick={() => alert(`Buying at ${buyPrice}`)}
           customStyle={{ backgroundColor: 'green', color: 'white' }}  
         />
         <CustomButton
           text={`Rent it/day: ${rentPrice}`}
           height="40px"
-          width="140px"
+          width="150px"
           onClick={() => alert(`Renting for ${rentPrice} per day`)}
         />
       </CardActions>

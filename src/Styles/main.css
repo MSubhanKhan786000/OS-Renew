@@ -1,143 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap");
 
 * {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
-	font-family: "Titillium Web", sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Titillium Web", sans-serif;
 }
 
 :root {
-	--mainColor: #29335c;
---mainColorLight: #5767aa;
---secondaryColor: #db2b39;
---textColor: #eee;
---accentColorYellow: #f4d35e;
---accentColorOrange: #f79d65;
---accentColorTeal: #41b3a3;
---accentColorMint: #a8e6cf;
---backgroundColorLightGray: #f0f0f0;
---backgroundColorBeige: #f6ead4;
---backgroundColorCoolWhite: #f9f9f9;
---shadowColorDarkGray: #4a4a4a;
---borderColorMutedNavy: #1f2a44;
-
+  --mainColor: #29335c;
+  --secondaryColor: #db2b39;
+  --accentColorYellow: #f4d35e;
+  --backgroundColorLightGray: #f0f0f0;
+  --backgroundColorCoolWhite: #f9f9f9;
 }
 
-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	height: 80px;
-	padding: 0 2rem;
-	background-color: var(--textColor);
-	color: var(--textColor);
-}
-
-nav a {
-	margin: 0 1rem;
-	color: var(--secondaryColor);
-	text-decoration: none;
-	font-weight: 700;
-}
-
-nav a:hover {
-	color: var(--mainColorLight);
-}
-
-header .nav-btn {
-	padding: 5px;
-	cursor: pointer;
-	background: transparent;
-	border: none;
-	outline: none;
-	color: var(--secondaryColor);
-	visibility: hidden;
-	opacity: 0;
-	font-size: 1.8rem;
-}
-
-header div,
-nav {
-	display: flex;
-	align-items: center;
-}
-
-@media only screen and (max-width: 1024px) {
-	header .nav-btn {
-		visibility: visible;
-		opacity: 1;
-	}
-
-	header nav {
-		position: fixed;
-		top: -100vh;
-		left: 0;
-		height: 100%;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 1.5rem;
-		background-color: var(--textColor);
-		transition: 1s;
-	}
-
-	header .responsive_nav {
-		transform: translateY(100vh);
-	}
-
-	nav .nav-close-btn {
-		position: absolute;
-		top: 2rem;
-		right: 2rem;
-	}
-
-	nav a {
-		font-size: 1.5rem;
-	}
-}
-
-header img {
-    max-width: 150px; /* Default size for large screens */
-    height: auto;
-	
-}
-
-/* Icon container styling */
-.navbar-icons {
-	display: flex;
-	align-items: center;
-	gap: 1rem;
-  }
-  
-  .icon {
-	width: 30px; /* Default icon size */
-	height: auto;
-  }
-  
-  /* For screens larger than 768px */
-  @media only screen and (min-width: 768px) {
-	.navbar-icons .logout-icon {
-	  display: inline; /* Show logout icon */
-	}
-	.navbar-icons .cart-icon,
-	.navbar-icons .profile-icon {
-	  display: inline; /* Show cart and profile icons */
-	}
-  }
-  
-  /* For screens smaller than 768px */
-  @media only screen and (max-width: 768px) {
-	.navbar-icons .logout-icon {
-	  display: inline; /* Show only the logout icon */
-	}
-	.navbar-icons .cart-icon,
-	.navbar-icons .profile-icon {
-	  display: none; /* Hide cart and profile icons */
-	}
-  }
-  
-  /* Other navbar styles remain unchanged */
-  
