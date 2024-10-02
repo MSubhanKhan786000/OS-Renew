@@ -9,7 +9,7 @@ import {
   FloatingLabel,
 } from "react-bootstrap";
 
-function Earn() {
+function SignUp() {
   const [validated, setValidated] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
@@ -128,4 +128,4 @@ function Earn() {
   );
 }
 
-export default Earn;
+export default SignUp;
