@@ -6,6 +6,9 @@ import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import Earn from './pages/Earn'; // Make sure this is the correct path
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 const queryClient = new QueryClient();
 

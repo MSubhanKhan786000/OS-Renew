@@ -18,13 +18,13 @@ export default function ProductCard({ name, description, image, buyPrice, rentPr
   };
 
   return (
-    <Card sx={{ width: 300, height: 350, display: 'flex', flexDirection: 'column', justifyContent: 'space-between',margin:"20px" }}>
+    <Card sx={{ width: 300, height: 350, display: 'flex', flexDirection: 'column', justifyContent: 'space-between',marginBottom:"20px" }}>
       <CardActionArea>
         <CardMedia
           component="img"
-          image={image}  // Use product image
-          alt={name}  // Use product name as alt text
-          sx={{ width: '100%', height: 180, objectFit: 'cover' }}  // Fixed size for image
+          image={image} 
+          alt={name} 
+          sx={{ width: '100%', height: 180, objectFit: 'cover' }} 
         />
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="div">
