@@ -47,7 +47,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#29335c' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#fff' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo for larger screens */}
@@ -86,7 +86,7 @@ function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={`/${page.toLowerCase().replace(' ', '')}`} style={{ textDecoration: 'none', color: '#000' }}>
+                  <Link to={`/${page.toLowerCase().replace(' ', '')}`} style={{ textDecoration: 'none', color: '#000000' }}>
                     {page}
                   </Link>
                 </MenuItem>
@@ -116,7 +116,7 @@ function Navbar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block', textDecoration: 'none' }}
+                sx={{ my: 2, color: 'black', display: 'block', textDecoration: 'none' }}
               >
                 <Link to={`/${page.toLowerCase().replace(' ', '')}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                   {page}
@@ -133,11 +133,11 @@ function Navbar() {
 
           {/* User icons and avatar */}
           <Box sx={{ flexGrow: 0, display: 'flex', gap: 2 }}>
-            <Box component="img" src={cartIcon} alt="Cart" sx={{ width: 30 }} />
-            <Box component="img" src={profileIcon} alt="Profile" sx={{ width: 30 }} />
+            <Box component="img" src={cartIcon} alt="Cart" sx={{ width: 20, height:20 }} />
+            <Box component="img" src={profileIcon} alt="Profile" sx={{ width: 20, height:20 }} />
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={logoutIcon} />
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0,width: 20, height:20 }}>
+                <Avatar alt="Remy Sharp" src={logoutIcon} sx={{width:20,height:20}} />
               </IconButton>
             </Tooltip>
             <Menu
