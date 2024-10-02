@@ -133,11 +133,11 @@ function Navbar() {
 
           {/* User icons and avatar */}
           <Box sx={{ flexGrow: 0, display: 'flex', gap: 2 }}>
-            <Box component="img" src={cartIcon} alt="Cart" sx={{ width: 20, height:20 }} />
-            <Box component="img" src={profileIcon} alt="Profile" sx={{ width: 20, height:20 }} />
+            <Box component="img" src={cartIcon} alt="Cart" sx={{ width: 30, height:30 }} />
+            <Box component="img" src={profileIcon} alt="Profile" sx={{ width: 30, height:30 }} />
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0,width: 20, height:20 }}>
-                <Avatar alt="Remy Sharp" src={logoutIcon} sx={{width:20,height:20}} />
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
+                <Avatar alt="Remy Sharp" src={logoutIcon} sx={{width:30,height:30, cursor:"pointer"}} />
               </IconButton>
             </Tooltip>
             <Menu
