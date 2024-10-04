@@ -1,129 +1,217 @@
-import React, { useState, useRef } from "react";
-import "../Styles/Form.css";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  FloatingLabel,
-} from "react-bootstrap";
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import CustomModal from "../Components/CustomModal";
+import { useNavigate } from "react-router-dom";
+import Colors from "../constants/Colors";
+import { handleRegister } from "../services/auth"; // Import the function
 
 function SignUp() {
   const [validated, setValidated] = useState(false);
-  const [password, setPassword] = useState("");
-  const [confirmation, setConfirmation] = useState("");
-  const confirmationError = useRef(null);
-  const progressBar = useRef(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state
+  const navigate = useNavigate();
 
-  const handleSubmit = event => {
+  const [formData, setFormData] = useState({
+    fname: "",
+    lname: "",
+    pnumber: "",
+    email: "",
+    address: "",
+    password: "",
+    city: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
     const form = event.currentTarget;
-    if (form.checkValidity() === false || password !== confirmation) {
+
+    if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-      confirmationError.current.style.display =
-        password !== confirmation ? "block" : "none";
+      setModalMessage("Please fill in all fields correctly.");
+      setModalType("error");
+      setShowModal(true);
     } else {
-      confirmationError.current.style.display = "none";
+      event.preventDefault();
+      setLoading(true);
+      
+      const response = await handleRegister(formData);
+      setLoading(false);
+
+      if (response) {
+        setModalMessage(response.message);
+        setModalType("success");
+        setShowModal(true);
+        navigate("/login"); // Navigate to login on success
+      } else {
+        setModalMessage("Sign up failed");
+        setModalType("error");
+        setShowModal(true);
+      }
     }
+
     setValidated(true);
   };
 
-  const handlePasswordChange = password => {
-    setPassword(password);
-    const letterMatch = (password.match(/[a-zA-Z]/g) || []).length;
-    const numberMatch = (password.match(/[0-9]/g) || []).length;
-    const specialMatch = (password.match(/[#?!@$%^&*-]/g) || []).length;
-
-    const strength = letterMatch + numberMatch * 2 + specialMatch * 3;
-    progressBar.current.style.width = `${strength * 3}%`;
-    let color = "red";
-    if (strength > 10) {
-      color = "orange";
-    }
-    if (strength > 26) {
-      color = "green";
-    }
-    progressBar.current.style.backgroundColor = color;
-  };
-
   return (
-    <div className="form-wrapper">
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Container fluid>
-          <h2 className="form-title">Sign up a new user</h2>
-          <Row>
-            {/* First Name and Last Name */}
-            <Col sm={6}>
-              <FloatingLabel
-                controlId="firstNameLabel"
-                label="First name"
-                className="mb-3"
-              >
-                <Form.Control type="text" placeholder="First name" required />
-              </FloatingLabel>
-            </Col>
-            <Col sm={6}>
-              <FloatingLabel
-                controlId="lastNameLabel"
-                label="Last name"
-                className="mb-3"
-              >
-                <Form.Control type="text" placeholder="Last name" required />
-              </FloatingLabel>
-            </Col>
-          </Row>
-
-          {/* Email */}
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <FloatingLabel controlId="emailLabel" label="Enter email">
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                required
-                pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-              />
-            </FloatingLabel>
-            <Form.Text className="text-muted">
-              We'll (hopefully) never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-
-          {/* Password */}
-          <FloatingLabel
-            controlId="passwordLabel"
-            label="Password"
-            className="mb-3"
+    <div
+      className="d-flex justify-content-center align-items-center vh-100"
+      style={{
+        backgroundColor: Colors.mainColor,
+        position: "relative",
+      }}
+    >
+      <div
+        className="w-50 border rounded p-4 shadow"
+        style={{ backgroundColor: "#fff", borderColor: Colors.mainColor }}
+      >
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <h2
+            className="text-center"
+            style={{ color: Colors.mainColor, fontWeight: 500 }}
           >
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              required
-              pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-              onChange={e => handlePasswordChange(e.target.value)}
-            />
-          </FloatingLabel>
-
-          <FloatingLabel
-            controlId="confirmPasswordLabel"
-            label="Confirmation"
-            className="mb-3"
+            Sign Up
+          </h2>
+          <p
+            className="text-center p-2 mb-4"
+            style={{
+              backgroundColor: Colors.secondaryColor,
+              color: Colors.backgroundColorLightGray,
+              borderRadius: 5,
+            }}
           >
-            <Form.Control
-              type="password"
-              placeholder="Confirmation"
-              required
-              onChange={e => setConfirmation(e.target.value)}
-            />
-          </FloatingLabel>
-
-          <p style={{ color: "red", display: "none" }} ref={confirmationError}>
-            Password and confirmation are not the same
+            New here? Create an account and get started!
           </p>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="6" controlId="firstName">
+              <Form.Label>First name</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                name="fname"
+                placeholder="First name"
+                value={formData.fname}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="6" controlId="lastName">
+              <Form.Label>Last name</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                name="lname"
+                placeholder="Last name"
+                value={formData.lname}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="6" controlId="phone">
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                required
+                type="tel"
+                name="pnumber"
+                placeholder="Phone Number"
+                pattern="[0-9]{10}"
+                value={formData.pnumber}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please enter a valid phone number.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="6" controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                required
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid email.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Form.Group controlId="address">
+            <Form.Label>Address</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              name="address"
+              placeholder="Address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid address.
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Row className="mb-3 mt-3">
+            <Form.Group as={Col} md="6" controlId="city">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                name="city"
+                placeholder="City"
+                value={formData.city}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid city.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="6" controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                required
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a password.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Button type="submit" className="w-100 mt-4" disabled={loading}>
+            {loading ? "Signing up..." : "Sign Up"}
+          </Button>
+          <p className="mt-3 text-center">
+            Already have an account?{" "}
+            <Button variant="success" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+          </p>
+        </Form>
 
-          <Button type="submit">Register</Button>
-        </Container>
-      </Form>
+        {showModal && (
+          <CustomModal
+            type={modalType}
+            title={modalType === "success" ? "Success" : "Error"}
+            content={modalMessage}
+            onClose={() => setShowModal(false)}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { fetchProducts } from "../services/productService";
 import ProductCard from "../Components/ProductCard";
 import DropDown from "../Components/DropDown";
 import HomeSkeleton from "../Components/HomeSkeleton";
+import Review from "../Components/Feedback";
 
 function Home() {
   const { data, error, isLoading } = useQuery({
@@ -85,6 +86,7 @@ function Home() {
           />
         ))}
       </div>
+      <Review />
     </div>
   );
 }

@@ -18,6 +18,7 @@ import logoutIcon from "../assets/logout.png";
 import { useState } from "react";
 import { Typography } from "@mui/material";
 import CustomButton from "./CustomButton";
+import { AiOutlineLogout } from "react-icons/ai";
 
 const pages = ["Men Collection", "Women Collection", "About Us", "Contact Us"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -26,6 +27,10 @@ function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/login"); // Redirect to login page on logout
+  };
 
   const handleOpenNavMenu = event => {
     setAnchorElNav(event.currentTarget);
@@ -169,7 +174,7 @@ function Navbar() {
               alt="Profile"
               sx={{ width: 30, height: 30 }}
             />
-            <Tooltip title="Open settings">
+            {/* <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt="Remy Sharp"
@@ -177,7 +182,10 @@ function Navbar() {
                   sx={{ width: 30, height: 30, cursor: "pointer" }}
                 />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
+            <nav>
+              <AiOutlineLogout onClick={handleLogout} color="black" size={25} />
+            </nav>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"

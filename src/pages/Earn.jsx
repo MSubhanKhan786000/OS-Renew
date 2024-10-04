@@ -1,129 +1,222 @@
-import React, { useState, useRef } from "react";
-import "../Styles/Form.css";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  FloatingLabel,
-} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import Row from "react-bootstrap/Row";
+import * as formik from "formik";
+import * as yup from "yup";
+import Colors from "../constants/Colors";
 
 function Earn() {
-  const [validated, setValidated] = useState(false);
-  const [password, setPassword] = useState("");
-  const [confirmation, setConfirmation] = useState("");
-  const confirmationError = useRef(null);
-  const progressBar = useRef(null);
+  const { Formik } = formik;
 
-  const handleSubmit = event => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false || password !== confirmation) {
-      event.preventDefault();
-      event.stopPropagation();
-      confirmationError.current.style.display =
-        password !== confirmation ? "block" : "none";
-    } else {
-      confirmationError.current.style.display = "none";
-    }
-    setValidated(true);
-  };
-
-  const handlePasswordChange = password => {
-    setPassword(password);
-    const letterMatch = (password.match(/[a-zA-Z]/g) || []).length;
-    const numberMatch = (password.match(/[0-9]/g) || []).length;
-    const specialMatch = (password.match(/[#?!@$%^&*-]/g) || []).length;
-
-    const strength = letterMatch + numberMatch * 2 + specialMatch * 3;
-    progressBar.current.style.width = `${strength * 3}%`;
-    let color = "red";
-    if (strength > 10) {
-      color = "orange";
-    }
-    if (strength > 26) {
-      color = "green";
-    }
-    progressBar.current.style.backgroundColor = color;
-  };
+  const schema = yup.object().shape({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    username: yup.string().required(),
+    city: yup.string().required(),
+    state: yup.string().required(),
+    zip: yup.string().required(),
+    file: yup.mixed().required(),
+    terms: yup.bool().required().oneOf([true], "terms must be accepted"),
+  });
 
   return (
-    <div className="form-wrapper">
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Container fluid>
-          <h2 className="form-title">Sign up a new user</h2>
-          <Row>
-            {/* First Name and Last Name */}
-            <Col sm={6}>
-              <FloatingLabel
-                controlId="firstNameLabel"
-                label="First name"
-                className="mb-3"
+    <div className="d-flex justify-content-center align-items-center vh-100">
+      <Formik
+        validationSchema={schema}
+        onSubmit={console.log}
+        initialValues={{
+          firstName: "Mark",
+          lastName: "Otto",
+          username: "",
+          city: "",
+          state: "",
+          zip: "",
+          file: null,
+          terms: false,
+        }}
+      >
+        {({ handleSubmit, handleChange, values, touched, errors }) => (
+          <Form
+            noValidate
+            onSubmit={handleSubmit}
+            className="bg-light p-4 rounded shadow"
+          >
+            <h2
+              style={{
+                color: Colors.secondaryColor,
+                textAlign: "center",
+                marginTop: 0,
+                // backgroundColor: Colors.backgroundColorLightGray,
+                borderRadius: 10,
+                padding: 10,
+                fontWeight: "bold",
+                fontSize: 30,
+              }}
+            >
+              Earn With Us 💰
+            </h2>
+            <p
+              style={{
+                textAlign: "center",
+                backgroundColor: Colors.mainColor,
+                color: Colors.backgroundColorLightGray,
+                borderRadius: 5,
+                padding: 5,
+              }}
+            >
+              Ready to Earn and elevate your business with Us! You are just 2
+              steps Away 🚀🌟
+            </p>
+            <Row className="mb-3">
+              <Form.Group
+                as={Col}
+                md="4"
+                controlId="validationFormik101"
+                className="position-relative"
               >
-                <Form.Control type="text" placeholder="First name" required />
-              </FloatingLabel>
-            </Col>
-            <Col sm={6}>
-              <FloatingLabel
-                controlId="lastNameLabel"
-                label="Last name"
-                className="mb-3"
+                <Form.Label>First name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="firstName"
+                  value={values.firstName}
+                  onChange={handleChange}
+                  isValid={touched.firstName && !errors.firstName}
+                />
+                <Form.Control.Feedback tooltip>
+                  Looks good!
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                as={Col}
+                md="4"
+                controlId="validationFormik102"
+                className="position-relative"
               >
-                <Form.Control type="text" placeholder="Last name" required />
-              </FloatingLabel>
-            </Col>
-          </Row>
-
-          {/* Email */}
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <FloatingLabel controlId="emailLabel" label="Enter email">
+                <Form.Label>Last name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="lastName"
+                  value={values.lastName}
+                  onChange={handleChange}
+                  isValid={touched.lastName && !errors.lastName}
+                />
+                <Form.Control.Feedback tooltip>
+                  Looks good!
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md="4" controlId="validationFormikUsername2">
+                <Form.Label>Username</Form.Label>
+                <InputGroup hasValidation>
+                  <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    placeholder="Username"
+                    aria-describedby="inputGroupPrepend"
+                    name="username"
+                    value={values.username}
+                    onChange={handleChange}
+                    isInvalid={!!errors.username}
+                  />
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    {errors.username}
+                  </Form.Control.Feedback>
+                </InputGroup>
+              </Form.Group>
+            </Row>
+            <Row className="mb-3">
+              <Form.Group
+                as={Col}
+                md="6"
+                controlId="validationFormik103"
+                className="position-relative"
+              >
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="City"
+                  name="city"
+                  value={values.city}
+                  onChange={handleChange}
+                  isInvalid={!!errors.city}
+                />
+                <Form.Control.Feedback type="invalid" tooltip>
+                  {errors.city}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                as={Col}
+                md="3"
+                controlId="validationFormik104"
+                className="position-relative"
+              >
+                <Form.Label>State</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="State"
+                  name="state"
+                  value={values.state}
+                  onChange={handleChange}
+                  isInvalid={!!errors.state}
+                />
+                <Form.Control.Feedback type="invalid" tooltip>
+                  {errors.state}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                as={Col}
+                md="3"
+                controlId="validationFormik105"
+                className="position-relative"
+              >
+                <Form.Label>Zip</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Zip"
+                  name="zip"
+                  value={values.zip}
+                  onChange={handleChange}
+                  isInvalid={!!errors.zip}
+                />
+                <Form.Control.Feedback type="invalid" tooltip>
+                  {errors.zip}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Form.Group className="position-relative mb-3">
+              <Form.Label>File</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter email"
+                type="file"
                 required
-                pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                multiple
+                name="file"
+                onChange={handleChange}
+                isInvalid={!!errors.file}
               />
-            </FloatingLabel>
-            <Form.Text className="text-muted">
-              We'll (hopefully) never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-
-          {/* Password */}
-          <FloatingLabel
-            controlId="passwordLabel"
-            label="Password"
-            className="mb-3"
-          >
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              required
-              pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-              onChange={e => handlePasswordChange(e.target.value)}
-            />
-          </FloatingLabel>
-
-          <FloatingLabel
-            controlId="confirmPasswordLabel"
-            label="Confirmation"
-            className="mb-3"
-          >
-            <Form.Control
-              type="password"
-              placeholder="Confirmation"
-              required
-              onChange={e => setConfirmation(e.target.value)}
-            />
-          </FloatingLabel>
-
-          <p style={{ color: "red", display: "none" }} ref={confirmationError}>
-            Password and confirmation are not the same
-          </p>
-
-          <Button type="submit">Register</Button>
-        </Container>
-      </Form>
+              <Form.Control.Feedback type="invalid" tooltip>
+                {errors.file}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="position-relative mb-3">
+              <Form.Check
+                required
+                name="terms"
+                label="Agree to terms and conditions"
+                onChange={handleChange}
+                isInvalid={!!errors.terms}
+                feedback={errors.terms}
+                feedbackType="invalid"
+                id="validationFormik106"
+                feedbackTooltip
+              />
+            </Form.Group>
+            <Button type="submit" className="w-100">
+              Submit form
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }

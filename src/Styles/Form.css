@@ -50,3 +50,12 @@ button.btn.btn-primary:hover {
 div.form-floating > .form-control {
   height: 55px;
 }
+
+.form-title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #db2b39;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}

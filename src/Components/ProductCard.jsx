@@ -6,6 +6,10 @@ import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CustomButton from "./CustomButton";
+import { IoCart } from "react-icons/io5";
+import Button from "@mui/material/Button";
+// import Typography from "@mui/material/Typography";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function ProductCard({
   name,
@@ -26,11 +30,12 @@ export default function ProductCard({
     <Card
       sx={{
         width: 300,
-        height: 350,
+        height: 400,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         marginBottom: "20px",
+        marginRight: "20px",
       }}
     >
       <CardActionArea>
@@ -53,7 +58,7 @@ export default function ProductCard({
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-evenly",
+          // justifyContent: "space-between",
           padding: "8px ",
         }}
       >
@@ -76,6 +81,32 @@ export default function ProductCard({
           onClick={() => alert(`Renting for ${rentPrice} per day`)}
         />
       </CardActions>
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<ShoppingCartIcon />}
+        sx={{
+          padding: "10px 10px",
+          marginTop: "10px",
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: "goldenrod", // Primary button color
+          "&:hover": {
+            backgroundColor: "#e6c176", // Hover effect
+          },
+        }}
+      >
+        <Typography
+          variant="button"
+          sx={{
+            fontWeight: "600",
+            fontSize: "1rem",
+            marginRight: "8px", // Space between text and icon
+          }}
+        >
+          Add to Cart
+        </Typography>
+      </Button>
     </Card>
   );
 }

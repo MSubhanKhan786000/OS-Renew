@@ -2,17 +2,16 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Home from './pages/Home';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
-import Earn from './pages/Earn'; // Make sure this is the correct path
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Earn from './pages/Earn';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Cart from './pages/Cart';
-
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+// import '../index.css'
 
 const queryClient = new QueryClient();
-
 
 function App() {
   return (
@@ -21,13 +20,12 @@ function App() {
         <div>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/aboutus" element={<AboutUs />} /> 
-            <Route path="/contactus" element={<ContactUs />} /> 
-            <Route path="/earn" element={<Earn />} /> 
-            <Route path="/cart" element={<Cart />} /> 
-
-
+            <Route path="/home" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/aboutus" element={<AboutUs />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/earn" element={<Earn />} />
           </Routes>
         </div>
       </Router>
