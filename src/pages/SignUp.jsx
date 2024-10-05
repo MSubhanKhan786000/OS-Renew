@@ -26,12 +26,12 @@ function SignUp() {
     city: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     const form = event.currentTarget;
 
     if (form.checkValidity() === false) {
@@ -42,21 +42,16 @@ function SignUp() {
       setShowModal(true);
     } else {
       event.preventDefault();
-      setLoading(true);
-      
-      const response = await handleRegister(formData);
-      setLoading(false);
+      setLoading(true); // Setting loading before the registration call
 
-      if (response) {
-        setModalMessage(response.message);
-        setModalType("success");
-        setShowModal(true);
-        navigate("/login"); // Navigate to login on success
-      } else {
-        setModalMessage("Sign up failed");
-        setModalType("error");
-        setShowModal(true);
-      }
+      // Pass all required parameters to handleRegister
+      await handleRegister(
+        formData,
+        setLoading,
+        setModalMessage,
+        setModalType,
+        setShowModal
+      );
     }
 
     setValidated(true);
@@ -130,7 +125,8 @@ function SignUp() {
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Please enter a valid phone number.
+                Please enter a phone number in this format(3344567890) without
+                0.
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md="6" controlId="email">
@@ -208,7 +204,12 @@ function SignUp() {
             type={modalType}
             title={modalType === "success" ? "Success" : "Error"}
             content={modalMessage}
-            onClose={() => setShowModal(false)}
+            onClose={() => {
+              setShowModal(false);
+              if (modalType === "success") {
+                navigate("/login"); // Only navigate after closing the success modal
+              }
+            }}
           />
         )}
       </div>

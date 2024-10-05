@@ -3,7 +3,7 @@ import { Form, Button, InputGroup } from "react-bootstrap";
 import CustomModal from "../Components/CustomModal";
 import { useNavigate } from "react-router-dom";
 import Colors from "../constants/Colors";
-import { handleLogin } from "../services/auth"; // Import the function
+import { handleLogin } from "../services/auth";
 
 function Login() {
   const [validated, setValidated] = useState(false);
@@ -39,12 +39,19 @@ function Login() {
         setLoading,
         setModalMessage,
         setModalType,
-        navigate,
-        setShowModal
+        setShowModal, // Ensure setShowModal is last
+        navigate
       );
     }
 
     setValidated(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    if (modalType === "success") {
+      navigate("/home"); // Only navigate to home on successful login
+    }
   };
 
   return (
@@ -119,7 +126,7 @@ function Login() {
             type={modalType}
             title={modalType === "success" ? "Success" : "Error"}
             content={modalMessage}
-            onClose={() => setShowModal(false)}
+            onClose={handleModalClose} // Navigate on modal close if success
           />
         )}
       </div>

@@ -29,7 +29,8 @@ function Navbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate("/login"); // Redirect to login page on logout
+    localStorage.removeItem("userId");
+    window.location.href = "/login";
   };
 
   const handleOpenNavMenu = event => {

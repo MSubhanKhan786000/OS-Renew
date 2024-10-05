@@ -1,10 +1,78 @@
-import { Modal } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
-import Swal from "sweetalert2";
-import CustomModal from "../Components/CustomModal";
 
-// Register function
 export const handleRegister = async (
+  formData,
+  setLoading,
+  setModalMessage,
+  setModalType,
+  setShowModal
+) => {
+  let modalAlreadyShown = false;
+
+  try {
+    setLoading(true);
+    const response = await axiosInstance.post("/singginupp", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("Full response:", response); // Log the full response
+
+    // Check if the response has a success message
+    if (response.data.message === "User created successfully") {
+      setModalMessage(
+        "Sign Up Successfully. Click Ok to navigate to the Login Screen."
+      );
+      setModalType("success");
+      if (!modalAlreadyShown) {
+        modalAlreadyShown = true;
+        setShowModal(true); // Open the modal on success
+      }
+    } else {
+      // Handle unexpected responses
+      setModalMessage(
+        "Registration failed: " + (response.data.message || "Unknown error")
+      );
+      setModalType("error");
+      if (!modalAlreadyShown) {
+        modalAlreadyShown = true;
+        setShowModal(true); // Open the modal on error
+      }
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      if (error.response.data.message === "Email already exists") {
+        setModalMessage(
+          "Email already exist. Try a different authentic email please."
+        );
+        setModalType("error");
+        if (!modalAlreadyShown) {
+          modalAlreadyShown = true;
+          setShowModal(true); // Open the modal on error
+        }
+      } else {
+        setModalMessage("An error occurred during registration");
+        setModalType("error");
+        if (!modalAlreadyShown) {
+          modalAlreadyShown = true;
+          setShowModal(true); // Open the modal on error
+        }
+      }
+    } else {
+      setModalMessage("An error occurred during registration");
+      setModalType("error");
+      if (!modalAlreadyShown) {
+        modalAlreadyShown = true;
+        setShowModal(true); // Open the modal on error
+      }
+    }
+  } finally {
+    setLoading(false);
+  }
+};
+
+export const handleLogin = async (
   formData,
   setLoading,
   setModalMessage,
@@ -12,65 +80,29 @@ export const handleRegister = async (
   setShowModal,
   navigate
 ) => {
+  let modalAlreadyShown = false;
+
   try {
     setLoading(true);
-    const response = await axiosInstance.post("/signup", formData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.data.success) {
-      setModalMessage("Registration successful!");
-      setModalType("success");
-      setShowModal(true); // Open the modal on success
-      navigate("/login"); // Optionally navigate after a delay
-    } else {
-      setModalMessage("Registration failed: " + response.data.message);
-      setModalType("error");
-      setShowModal(true); // Open the modal on error
-    }
-  } catch (error) {
-    setModalMessage("An error occurred during registration");
-    setModalType("error");
-    setShowModal(true); // Open the modal on error
-  } finally {
-    setLoading(false);
-  }
-};
-
-// Login function
-export const handleLogin = async (
-  formData,
-  setLoading,
-  setModalMessage,
-  setModalType,
-  navigate,
-  setShowModal
-) => {
-  try {
-    setLoading(true);
-    // Send POST request for login
     const response = await axiosInstance.post("/loggering", formData, {
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    // Log the full response to check its structure
     console.log("Full login response: ", response);
 
-    // Access the response directly since it's not nested in response.data
     if (response && response.message === "Login successful") {
-      <CustomModal
-        type="success"
-        title="Login Successful"
-        content="You have successfully logged in."
-        onClose={() => setShowModal(false)}
-      />;
-      console.log("Login successful: ", response);
-      navigate("/home", { state: { user: response.fname } });
-      localStorage.setItem("userId", response.userId);
+      setModalMessage("You have successfully logged in.");
+      setModalType("success");
+      setShowModal(true);
+
+      // Delay navigation to home screen to allow modal to show
+      setTimeout(() => {
+        // Ensure navigation happens after showing modal
+        navigate("/home", { state: { user: response.fname } });
+        localStorage.setItem("userId", response.userId);
+      }, 2000); // Adjust the delay as needed
     } else {
       setModalMessage(
         "Login failed: " + (response?.message || "Unknown error")
@@ -79,25 +111,29 @@ export const handleLogin = async (
       setShowModal(true);
     }
   } catch (error) {
-    console.error("Login Error:", error);
-    if (error.response && error.response.status === 401) {
-      <CustomModal
-        type="error"
-        title="Invalid Credentials"
-        content="Please check your email and password."
-        onClose={() => setShowModal(false)}
-      />;
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Credentials",
-        text: "Please check your email and password.",
-      });
+    if (error.response && error.response.data) {
+      if (error.response.data.message === "Invalid Credentials") {
+        setModalMessage("Invalid Credentials");
+        setModalType("error");
+        if (!modalAlreadyShown) {
+          modalAlreadyShown = true;
+          setShowModal(true);
+        }
+      } else {
+        setModalMessage("An error occurred during Login");
+        setModalType("error");
+        if (!modalAlreadyShown) {
+          modalAlreadyShown = true;
+          setShowModal(true);
+        }
+      }
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Server Error ",
-        text: "Login failed",
-      });
+      setModalMessage("An error occurred during login");
+      setModalType("error");
+      if (!modalAlreadyShown) {
+        modalAlreadyShown = true;
+        setShowModal(true);
+      }
     }
   } finally {
     setLoading(false);
